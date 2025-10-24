@@ -1,0 +1,57 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <InvariantGlobalization>true</InvariantGlobalization>
+    <UserSecretsId>a5ecfa1e-5bb5-4956-97d8-b0ae47d9e1fc</UserSecretsId>
+    <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="EntityFramework.Firebird" Version="10.1.0" />
+    <PackageReference Include="Firebird.Embedded" Version="3.0.0.32485" />
+    <PackageReference Include="FirebirdSql.EntityFrameworkCore.Firebird" Version="12.0.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.10" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="9.0.10">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.19.5" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="C:\Users\Max\.nuget\packages\firebird.embedded\3.0.0.32485\build\x64\fbclient.dll" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="C:\Users\Max\.nuget\packages\firebird.embedded\3.0.0.32485\build\x64\fbembed.dll" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="C:\Users\Max\.nuget\packages\firebird.embedded\3.0.0.32485\build\x64\ib_util.dll" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="C:\Users\Max\.nuget\packages\firebird.embedded\3.0.0.32485\build\x64\icudt52.dll" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="C:\Users\Max\.nuget\packages\firebird.embedded\3.0.0.32485\build\x64\icudt52l.dat" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="C:\Users\Max\.nuget\packages\firebird.embedded\3.0.0.32485\build\x64\icuin52.dll" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="C:\Users\Max\.nuget\packages\firebird.embedded\3.0.0.32485\build\x64\icuuc52.dll" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="C:\Users\Max\.nuget\packages\firebird.embedded\3.0.0.32485\build\x64\plugins.conf" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.8.34511.84
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RestApiVue3ToDoLIst", "RestApiVue3ToDoLIst\RestApiVue3ToDoLIst.csproj", "{7C7035A0-5278-4208-92B0-C80D91BE302F}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{7C7035A0-5278-4208-92B0-C80D91BE302F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7C7035A0-5278-4208-92B0-C80D91BE302F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7C7035A0-5278-4208-92B0-C80D91BE302F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7C7035A0-5278-4208-92B0-C80D91BE302F}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {21657B94-3025-43D3-8D7C-EC182358DC52}
+	EndGlobalSection
+EndGlobal
