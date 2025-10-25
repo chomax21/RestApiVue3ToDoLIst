@@ -92,11 +92,11 @@ namespace RestApiVue3ToDoLIst.Services
             return user!;
         }
 
-        public async Task<IEnumerable<User>> GetAllAsync(string? login, string? password)
+        public async Task<IEnumerable<User>> GetAllAsync(string? login)
         {
             try
             {
-                var checkUser = await CheckExtistAsync(new User { Login = login, Password = password });
+                var checkUser = await CheckExtistAsync(new User { Login = login});
                 if (checkUser != null)
                 {
                     var users = await _context.Users.ToListAsync();

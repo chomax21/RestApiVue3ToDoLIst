@@ -138,17 +138,18 @@ namespace RestApiVue3ToDoLIst.Controllers
 
         [HttpGet]
         [Route("users")]
-        public async Task<IResult> GetUsersInfo([FromQuery] string? login, string? password)
+        public async Task<IResult> GetUsersInfo([FromQuery] string? login)
         {
             try
             {
-                if (login == null && password == null)
+                if (login == null)
                 {
                     _logger.LogError("BadRequest.GetUsersInfo.NoParams");
                     return Results.Json(new UserResponce { Result = false, Message = "GetUsersInfo - Нет параметров" }, statusCode: 400);
                 }
 
-                var result = await _userContext.GetAllAsync(login, password!);
+                var result = await _userContext.GetAllAsync(login);
+
                 if (result == null)
                 {
                     _logger.LogInformation("Success.GetUsersInfo - Пользователи отсутсвуют");
