@@ -20,11 +20,9 @@ namespace RestApiVue3ToDoLIst.Data.Models.Entities
 
         [Required]
         public User? AssignedTo { get; set; }
+        
+        public DateTime? CreatedAt { get; set; }
 
-        [Required]
-        public DateTime? CreatedAt { get; set; } = DateTime.Now;
-
-        [Required]
         public DateTime? UpdatedAt { get; set; }
 
     }

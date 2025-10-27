@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using RestApiVue3ToDoLIst.Data.Interfaces;
+using RestApiVue3ToDoLIst.Data.Models.DTO.Requests;
 using RestApiVue3ToDoLIst.Data.Models.DTO.Responces;
 using RestApiVue3ToDoLIst.Data.Models.Entities;
 
@@ -9,10 +10,10 @@ namespace RestApiVue3ToDoLIst.Controllers
     [Route("api")]
     public class JobController : ControllerBase
     {
-        private readonly IJobRepository<Job> _jobContext;
+        private readonly IJobRepository<Job, JobRequest> _jobContext;
         private readonly ILogger<JobController> _logger;
 
-        public JobController(IJobRepository<Job> context, ILogger<JobController> logger)
+        public JobController(IJobRepository<Job, JobRequest> context, ILogger<JobController> logger)
         {
             _jobContext = context;
             _logger = logger;
@@ -21,17 +22,17 @@ namespace RestApiVue3ToDoLIst.Controllers
 
         [HttpPost]
         [Route("job")]
-        public async Task<IResult> CreateJob([FromBody] Job job)
+        public async Task<IResult> CreateJob([FromBody] JobRequest jobRequest)
         {
             try
             {
-                if (job == null)
+                if (jobRequest == null)
                 {
                     _logger.LogError("BadRequest.CreateJob - нет параметров!");
                     return Results.Json(new UserResponce { Result = false, Message = "CreateJob - Нет параметров" }, statusCode: 400);
                 }
 
-                var result = await _jobContext.AddAsync(job);
+                var result = await _jobContext.AddAsync(jobRequest);
 
                 if (result)
                 {
@@ -40,8 +41,8 @@ namespace RestApiVue3ToDoLIst.Controllers
                 }
                 else
                 {
-                    _logger.LogError("BadRequest.CreateJob - Ошибка при добавлении задачи!");
-                    return Results.BadRequest("BadRequest.CreateJob - Ошибка при добавлении задачи!");
+                    _logger.LogError("BadRequest.CreateJob - Ошибка при добавлении задачи!");                    
+                    return Results.Json(new UserResponce { Result = false, Message = "CreateJob - Ошибка при добавлении задачи" }, statusCode: 400);
                 }
             }
             catch (Exception ex)
@@ -74,17 +75,17 @@ namespace RestApiVue3ToDoLIst.Controllers
 
         [HttpGet]
         [Route("job")]
-        public async Task<IResult> GetJob([FromQuery] int? id)
+        public async Task<IResult> GetJob([FromQuery] JobRequest jobRequest)
         {
             try
             {
-                if (!id.HasValue)
+                if (jobRequest == null)
                 {
                     _logger.LogError("BadRequest.GetJob - нет параметров!");
                     return Results.Json(new UserResponce { Result = false, Message = "GetJob - Нет параметров" }, statusCode: 400);
                 }
 
-                var result = await _jobContext.GetAsync(id);
+                var result = await _jobContext.GetAsync(jobRequest);
 
                 if (result == null)
                 {
@@ -104,17 +105,17 @@ namespace RestApiVue3ToDoLIst.Controllers
 
         [HttpPut]
         [Route("job")]
-        public async Task<IResult> UpdateJob([FromBody] Job job)
+        public async Task<IResult> UpdateJob([FromBody] JobRequest jobRequest)
         {
             try
             {
-                if (job == null)
+                if (jobRequest == null)
                 {
                     _logger.LogError("BadRequest.UpdateJob - нет параметров!");
                     return Results.Json(new UserResponce { Result = false, Message = "UpdateJob - Нет параметров" }, statusCode: 400);
                 }
 
-                var result = await _jobContext.UpdateAsync(job);
+                var result = await _jobContext.UpdateAsync(jobRequest);
 
                 if (result != null)
                 {
@@ -133,17 +134,17 @@ namespace RestApiVue3ToDoLIst.Controllers
 
         [HttpDelete]
         [Route("job")]
-        public async Task<IResult> DropJob([FromBody] int? id)
+        public async Task<IResult> DropJob([FromBody] JobRequest jobRequest)
         {
             try
             {
-                if (!id.HasValue)
+                if (jobRequest == null)
                 {
                     _logger.LogError("BadRequest.DropJob - нет параметров!");
                     return Results.Json(new UserResponce { Result = false, Message = "DropJob - Нет параметров" }, statusCode: 400);
                 }
 
-                var result = await _jobContext.DropAsync(id);
+                var result = await _jobContext.DropAsync(jobRequest);
                 if (result)
                 {
                     _logger.LogInformation("Success.DropJob - Задача успешно удалена!");

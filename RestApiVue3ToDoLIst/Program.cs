@@ -2,6 +2,7 @@ using FirebirdSql.Data.FirebirdClient;
 using Microsoft.EntityFrameworkCore;
 using RestApiVue3ToDoLIst.Data.AppContext;
 using RestApiVue3ToDoLIst.Data.Interfaces;
+using RestApiVue3ToDoLIst.Data.Models.DTO.Requests;
 using RestApiVue3ToDoLIst.Data.Models.Entities;
 using RestApiVue3ToDoLIst.Services;
 
@@ -16,7 +17,7 @@ var connection = builder.Configuration.GetConnectionString("DefaultConnection");
 
 builder.Services.AddDbContext<ApplicationContext>(options => options.UseFirebird(connection));
 
-builder.Services.AddScoped<IJobRepository<Job>, JobService>();
+builder.Services.AddScoped<IJobRepository<Job, JobRequest>, JobService>();
 builder.Services.AddScoped<IUserRepository<User>, UserService>();
 
 var app = builder.Build();
