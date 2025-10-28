@@ -80,7 +80,10 @@ namespace RestApiVue3ToDoLIst.Services
         {
             try
             {
-                var job = _context.Jobs.Include(x => x.AssignedTo).Include(x => x.CreatedBy).FirstOrDefault(x => x.Id == jobRequest.Id);
+                var job = _context.Jobs.Include(x => x.AssignedTo)
+                                        .Include(x => x.CreatedBy)
+                                        .Include(x => x.Status)
+                                        .FirstOrDefault(x => x.Id == jobRequest.Id);
                 if (job != null)
                     return job!;
                 else
@@ -97,7 +100,10 @@ namespace RestApiVue3ToDoLIst.Services
         {
             try
             {
-                var jobs = await _context.Jobs.Include(x=>x.AssignedTo).Include(x => x.CreatedBy).ToListAsync();
+                var jobs = await _context.Jobs.Include(x=>x.AssignedTo)
+                                            .Include(x => x.CreatedBy)
+                                            .Include(x => x.Status)
+                                            .ToListAsync();
                 if (jobs != null)
                     return jobs;
                 return null!;
