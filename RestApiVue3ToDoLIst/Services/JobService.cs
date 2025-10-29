@@ -28,10 +28,10 @@ namespace RestApiVue3ToDoLIst.Services
             {                               
                 var createdBy = await _userService.CheckExtistAsync(new User() { Login = jobRequest.CreatedBy });
                 var assignedTo = await _userService.CheckExtistAsync(new User() { Login = jobRequest.AssignedTo });
-                var statusId = await GetStatus(jobRequest.Status);
+                var status = await GetStatus(jobRequest.Status);
 
                 var newJob = new Job() {                     
-                    Status = statusId,
+                    Status = status,
                     Description = jobRequest.Description,
                     Title = jobRequest.Title,
                     AssignedTo = assignedTo,
@@ -80,10 +80,11 @@ namespace RestApiVue3ToDoLIst.Services
         {
             try
             {
-                var job = _context.Jobs.Include(x => x.AssignedTo)
+                var job = await _context.Jobs
+                                        .Include(x => x.AssignedTo)
                                         .Include(x => x.CreatedBy)
                                         .Include(x => x.Status)
-                                        .FirstOrDefault(x => x.Id == jobRequest.Id);
+                                        .FirstOrDefaultAsync(x => x.Id == jobRequest.Id);
                 if (job != null)
                     return job!;
                 else
@@ -100,7 +101,8 @@ namespace RestApiVue3ToDoLIst.Services
         {
             try
             {
-                var jobs = await _context.Jobs.Include(x=>x.AssignedTo)
+                var jobs = await _context.Jobs
+                                            .Include(x=>x.AssignedTo)
                                             .Include(x => x.CreatedBy)
                                             .Include(x => x.Status)
                                             .ToListAsync();
@@ -119,11 +121,32 @@ namespace RestApiVue3ToDoLIst.Services
         {
             try
             {
-                var job = _context.Jobs.FirstOrDefault(x=>x.Id == jobRequest.Id);
-                _context.Jobs.Attach(job);
-                _context.Entry(job).State = EntityState.Modified;
-                await _context.SaveChangesAsync();
-                return job;
+                var job = _context.Jobs
+                                    .Include(x => x.AssignedTo)
+                                    .Include(x => x.CreatedBy)
+                                    .Include(x => x.Status).FirstOrDefault(x=>x.Id == jobRequest.Id);
+
+                var createdBy = await _userService.CheckExtistAsync(new User() { Login = jobRequest.CreatedBy });
+                var assignedTo = await _userService.CheckExtistAsync(new User() { Login = jobRequest.AssignedTo });
+                var status = await GetStatus(jobRequest.Status);
+
+                if(job != null)
+                {
+                    job.Status = status;
+                    job.AssignedTo = assignedTo;
+                    job.CreatedBy = createdBy;
+                    job.Title = jobRequest.Title;
+                    job.Description = jobRequest.Description;
+                    job.CreatedAt = jobRequest.CreatedAt;
+                    job.UpdatedAt = DateTime.Now;
+                    await _context.SaveChangesAsync();
+                    return job;
+                }
+                else
+                {
+                    return null!;
+                }
+                                
             }
             catch (Exception ex)
             {

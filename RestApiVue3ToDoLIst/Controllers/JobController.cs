@@ -29,7 +29,7 @@ namespace RestApiVue3ToDoLIst.Controllers
                 if (jobRequest == null)
                 {
                     _logger.LogError("BadRequest.CreateJob - нет параметров!");
-                    return Results.Json(new UserResponce { Result = false, Message = "CreateJob - Нет параметров" }, statusCode: 400);
+                    return Results.Json(new JobResponce { Result = false, Message = "CreateJob - Нет параметров" }, statusCode: 400);
                 }
 
                 var result = await _jobContext.AddAsync(jobRequest);
@@ -42,7 +42,7 @@ namespace RestApiVue3ToDoLIst.Controllers
                 else
                 {
                     _logger.LogError("BadRequest.CreateJob - Ошибка при добавлении задачи!");                    
-                    return Results.Json(new UserResponce { Result = false, Message = "CreateJob - Ошибка при добавлении задачи" }, statusCode: 400);
+                    return Results.Json(new JobResponce { Result = false, Message = "CreateJob - Ошибка при добавлении задачи" }, statusCode: 400);
                 }
             }
             catch (Exception ex)
@@ -65,7 +65,8 @@ namespace RestApiVue3ToDoLIst.Controllers
                 }
 
                 _logger.LogInformation("Success.GetJobs - Задачи успешно отправлены!");
-                return Results.Json(result, statusCode: 200);
+                var jobResponce = new JobResponce() { JobList = result.ToList() };
+                return Results.Json(jobResponce, statusCode: 200);
             }
             catch (Exception ex)
             {
@@ -82,7 +83,7 @@ namespace RestApiVue3ToDoLIst.Controllers
                 if (jobRequest == null)
                 {
                     _logger.LogError("BadRequest.GetJob - нет параметров!");
-                    return Results.Json(new UserResponce { Result = false, Message = "GetJob - Нет параметров" }, statusCode: 400);
+                    return Results.Json(new JobResponce { Result = false, Message = "GetJob - Нет параметров" }, statusCode: 400);
                 }
 
                 var result = await _jobContext.GetAsync(jobRequest);
@@ -112,7 +113,7 @@ namespace RestApiVue3ToDoLIst.Controllers
                 if (jobRequest == null)
                 {
                     _logger.LogError("BadRequest.UpdateJob - нет параметров!");
-                    return Results.Json(new UserResponce { Result = false, Message = "UpdateJob - Нет параметров" }, statusCode: 400);
+                    return Results.Json(new JobResponce { Result = false, Message = "UpdateJob - Нет параметров" }, statusCode: 400);
                 }
 
                 var result = await _jobContext.UpdateAsync(jobRequest);
@@ -120,7 +121,7 @@ namespace RestApiVue3ToDoLIst.Controllers
                 if (result != null)
                 {
                     _logger.LogInformation("Success.GetJob - Задача успешно обновлена!");
-                    return Results.Json(result, statusCode: 200);
+                    return Results.Json(new JobResponce { Result = true, Job = result }, statusCode: 200);
                 }
 
                 _logger.LogError("BadRequest.UpdateJob - Нет данных!");
@@ -141,18 +142,18 @@ namespace RestApiVue3ToDoLIst.Controllers
                 if (jobRequest == null)
                 {
                     _logger.LogError("BadRequest.DropJob - нет параметров!");
-                    return Results.Json(new UserResponce { Result = false, Message = "DropJob - Нет параметров" }, statusCode: 400);
+                    return Results.Json(new JobResponce { Result = false, Message = "DropJob - Нет параметров" }, statusCode: 400);
                 }
 
                 var result = await _jobContext.DropAsync(jobRequest);
                 if (result)
                 {
                     _logger.LogInformation("Success.DropJob - Задача успешно удалена!");
-                    return Results.Json(new UserResponce { Result = true, Message = "Success.DropJob" }, statusCode: 200);
+                    return Results.Json(new JobResponce { Result = true, Message = "Success.DropJob" }, statusCode: 200);
                 }
 
                 _logger.LogError("BadRequest.DropJob - Ошибка!");
-                return Results.Json(new UserResponce { Result = false, Message = "Ошибка!" }, statusCode: 500);
+                return Results.Json(new JobResponce { Result = false, Message = "Ошибка!" }, statusCode: 500);
             }
             catch (Exception ex)
             {
@@ -163,7 +164,7 @@ namespace RestApiVue3ToDoLIst.Controllers
         private IResult InternalServerErrorHandler(string message)
         {
             _logger.LogError("Error.JobController - Произошла непредвиденная ошибка! {message}", message);
-            return Results.Json(new UserResponce { Result = false, Message = message }, statusCode: 500);
+            return Results.Json(new JobResponce { Result = false, Message = message }, statusCode: 500);
         }
     }
 }
