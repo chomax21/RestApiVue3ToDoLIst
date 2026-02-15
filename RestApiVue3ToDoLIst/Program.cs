@@ -27,7 +27,7 @@ app.UseCors(options => options.AllowAnyOrigin()
                                 .AllowAnyHeader()
                                 .AllowAnyMethod());
 
-app.UseMiddleware<GlobalExceptionMiddleware>();
+//app.UseMiddleware<GlobalExceptionMiddleware>();
 
 if (app.Environment.IsDevelopment())
 {
