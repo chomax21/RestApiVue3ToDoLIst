@@ -12,17 +12,19 @@ public class ApplicationContext : DbContext
     public ApplicationContext(DbContextOptions<ApplicationContext> options)
         : base(options)
     {
-        Database.EnsureCreated();  
+        //Database.EnsureCreated();  
+        //Database.Migrate();
     }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<User>().HasData(
-                new User { 
+                new User
+                {
                     Id = 1,
                     Login = "Admin",
                     Name = "Admin",
                     SurName = "_",
-                    LastName = "_",       
+                    LastName = "_",
                     Password = "Admin",
                     Position = "boss"
                 }
@@ -32,8 +34,8 @@ public class ApplicationContext : DbContext
                 [
                     new Status { Id = 1, StatusCode = 1, StatusName = "ToDo" },
                     new Status { Id = 2, StatusCode = 2, StatusName = "InProgress" },
-                    new Status { Id = 3, StatusCode = 3, StatusName = "Done" }                    
-                ]            
+                    new Status { Id = 3, StatusCode = 3, StatusName = "Done" }
+                ]
         );
     }
 }

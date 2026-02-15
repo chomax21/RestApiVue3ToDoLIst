@@ -4,6 +4,7 @@ using RestApiVue3ToDoLIst.Data.AppContext;
 using RestApiVue3ToDoLIst.Data.Interfaces;
 using RestApiVue3ToDoLIst.Data.Models.DTO.Requests;
 using RestApiVue3ToDoLIst.Data.Models.Entities;
+using RestApiVue3ToDoLIst.Middleware;
 using RestApiVue3ToDoLIst.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -22,9 +23,11 @@ builder.Services.AddScoped<IUserRepository<User>, UserService>();
 
 var app = builder.Build();
 
-app.UseCors(options => options.WithOrigins("http://localhost:5174", "http://localhost:5173")
-.AllowAnyHeader()
-.AllowAnyMethod());
+app.UseCors(options => options.AllowAnyOrigin()
+                                .AllowAnyHeader()
+                                .AllowAnyMethod());
+
+app.UseMiddleware<GlobalExceptionMiddleware>();
 
 if (app.Environment.IsDevelopment())
 {
@@ -32,10 +35,14 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-//app.UseHttpsRedirection();
+using var scope = app.Services.CreateScope();
+scope.ServiceProvider.GetRequiredService<ApplicationContext>().Database.EnsureCreated();
 
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.MapGet("/", () => "API is running!");
+app.MapGet("/health", () => new { status = "OK" });
 
 app.Run();

@@ -1,0 +1,58 @@
+version: '3.8'
+
+services:
+  # Firebird Database
+  firebird:
+    image: jacobalberty/firebird:3.0
+    container_name: firebird_db
+    environment:
+      - ISC_PASSWORD=masterkey
+      - FIREBIRD_DATABASE=myapp.fdb
+      - FIREBIRD_USER=sysdba
+    ports:
+      - "3050:3050"
+    volumes:
+      - firebird_data:/firebird/data
+    networks:
+      - app-network
+
+  # Web API
+  webapi:
+    build: 
+      context: ./RestApiVue3ToDoLIst
+      dockerfile: Dockerfile
+    container_name: webapi_app
+    environment:
+      - ConnectionStrings__DefaultConnection=Database=firebird:/firebird/data/myapp.fdb;User=sysdba;Password=masterkey;Dialect=3;Charset=UTF8;
+      - ASPNETCORE_ENVIRONMENT=Development      
+    ports:
+      - "5000:80"
+    depends_on:
+      - firebird
+    networks:
+      - app-network
+
+  # Vue 3 Application (Dev server)
+  vue-app:
+    build:
+      context: ./my-app
+      dockerfile: Dockerfile
+    container_name: vue_app
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./my-app:/app
+      - /app/node_modules
+    depends_on:
+      - webapi
+    networks:
+      - app-network
+    stdin_open: true
+    tty: true
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  firebird_data:

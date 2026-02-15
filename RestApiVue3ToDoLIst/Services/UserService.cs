@@ -18,70 +18,35 @@ namespace RestApiVue3ToDoLIst.Services
         }
         public async Task<bool> AddAsync(User? user)
         {
-            try
-            {
-                await _context.Users.AddAsync(user!);
-                await _context.SaveChangesAsync();
-                return true;
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex.Message);
-                return false;
-            }
+            if (user == null)            
+                return false;                                             
+            
+            await _context.Users.AddAsync(user!);
+            await _context.SaveChangesAsync();
+            return true;
         }
 
         public async Task<bool> DropAsync(int? id, string? password)
-        {
-            try
-            {
-                var user = await _context.Users.FirstOrDefaultAsync(x => x.Id == id && x.Password == password);
-                if (user == null)
-                    return false;
+        {                        
+           var user = await _context.Users.FirstOrDefaultAsync(x => x.Id == id && x.Password == password);
+           if (user == null)
+              return false;
 
-                _context.Users.Remove(user!);
-                await _context.SaveChangesAsync();
-                return true;
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex.Message);
-                return false;
-            }
-
+            _context.Users.Remove(user!);
+            await _context.SaveChangesAsync();
+            return true;            
         }
 
-        public async Task<User> GetAsync(string? login, string? password)
+        public async Task<User> GetAsync(string? login = "", string? password = "")
         {
-            try
-            {
-                var user = await _context.Users.FirstOrDefaultAsync(x => x.Login == login && x.Password == password);
-                return user ?? null!;
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex.Message);
-                return null!;
-            }
-
+            var user = await _context.Users.FirstOrDefaultAsync(x => x.Login == login && x.Password == password);
+            return user ?? null!;            
         }
 
         public async Task<User> CheckExtistAsync(User? user)
         {
-            try
-            {
-                var existUser = await _context.Users.FirstOrDefaultAsync(x => x.Login == user.Login);
-                if (existUser != null)
-                    return existUser;
-
-                return null!;
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex.Message);
-                return null!;
-            }
-
+            var existUser = await _context.Users.FirstOrDefaultAsync(x => x.Login == user.Login);               
+            return existUser ?? null!;
         }
 
         public async Task<User> UpdateAsync(User? user)
@@ -93,22 +58,13 @@ namespace RestApiVue3ToDoLIst.Services
         }
 
         public async Task<IEnumerable<User>> GetAllAsync(string? login)
-        {
-            try
-            {
-                var checkUser = await CheckExtistAsync(new User { Login = login});
-                if (checkUser != null)
-                {
-                    var users = await _context.Users.ToListAsync();
-                    return users;
-                }
+        {                      
+            var checkUser = await CheckExtistAsync(new User { Login = login });                
+            if (checkUser == null)
                 return null!;
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex.Message);
-                return null!;
-            }
+            
+            var users = await _context.Users.ToListAsync();
+            return users ?? new List<User>(0);                       
         }
     }
 }

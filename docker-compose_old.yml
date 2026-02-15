@@ -1,0 +1,48 @@
+version: '3.8'
+
+services:
+  firebird:
+    image: jacobalberty/firebird:3.0
+    environment:
+      - ISC_PASSWORD=masterkey
+    ports:
+      - "3050:3050"
+    volumes:
+      - firebird_data:/firebird/data
+  
+  webapi:
+    build:
+      context: ./RestApiVue3ToDoLIst
+      dockerfile: Dockerfile
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://0.0.0.0:8080
+      - ConnectionStrings__DefaultConnection=Database=firebird/3050:appdb.fdb;User=sysdba;Password=masterkey;Dialect=3;Charset=UTF8;
+    ports:
+      - "5000:8080"
+    depends_on:
+      - firebird
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  vue-app:
+    build:
+      context: ./my-app
+      dockerfile: Dockerfile
+    container_name: vue_app
+    ports:
+      - "8080:80"
+    volumes:
+      - ./my-app:/app
+      - /app/node_modules
+    depends_on:
+      - webapi
+    stdin_open: true
+    tty: true
+
+
+volumes:
+  firebird_data:
